@@ -30,7 +30,8 @@ const Book = db.define('Book', {
     },
     checkedOutQuantity:{
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        defaultValue: 0
     }
 });
 

@@ -6,11 +6,11 @@ exports.createBook = async (bookDetails) => {
     try {
         const { title, author, price, isbn, stockedQuantity, checkedOutQuantity } = bookDetails;
 
-        if(!title || !author || !price || !isbn || !stockedQuantity || !checkedOutQuantity) {
-            return res.status(400).json({ message: "Please provide all the book details" });
+        if (!title || !author || !price || !isbn || !stockedQuantity || !checkedOutQuantity) {
+            throw new Error("Please provide all the book details");
         }
 
-        const book = await Book.create({
+        return await Book.create({
             title,
             author,
             price,
@@ -18,8 +18,9 @@ exports.createBook = async (bookDetails) => {
             stockedQuantity,
             checkedOutQuantity
         });
+
     } catch (err) {
-        console.log({ error: "Unable to create new book", err });
+        throw new Error("Unable to create new book: " + err.message);
     }
 };
 
@@ -54,16 +55,12 @@ exports.getBooksById = async (id) => {
 
 exports.updateStockedQuantity = async (bookId, stockedQuantity) =>{
     try{
-        const [updatedStockedQuantity] = await Book.update(
-            { stockedQuantity },
-            { where: { id: bookId } }
-        );
-
-        if(updatedStockedQuantity === 0){
-            throw new Error("Unable to update stocked quantity");
+        const updatedBook = await Book.findByPk(bookId);
+        if(!updatedBook){
+            throw new Error("Unable to find book");
         }
 
-        const updatedBook = await Book.findByPk(bookId);
+        await updatedBook.update(stockedQuantity);
         return updatedBook;
     
     }catch(err){
