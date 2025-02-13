@@ -2,7 +2,7 @@ const Book = require('../models/Book');
 
 
 // create a new book
-exports.createBook = async (bookDetails,res) => {
+exports.createBook = async (bookDetails) => {
     try {
         const { title, author, price, isbn, stockedQuantity, checkedOutQuantity } = bookDetails;
 
@@ -18,9 +18,8 @@ exports.createBook = async (bookDetails,res) => {
             stockedQuantity,
             checkedOutQuantity
         });
-        res.status(201).json(book);
     } catch (err) {
-        res.status(400).json({ error: "Unable to create new book", err });
+        console.log({ error: "Unable to create new book", err });
     }
 };
 

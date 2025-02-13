@@ -7,7 +7,7 @@ exports.createBook = async (req, res) => {
         const book = await BookService.createBook(req.body);
         res.status(201).json(book);
     }catch (err) {
-        res.status(500).json({ message: 'Error creating book' });
+        res.status(500).json({ message: 'Error creating book',err:err.message });
     }
 };
 
